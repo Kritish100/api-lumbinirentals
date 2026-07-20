@@ -13,6 +13,11 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true })); 
 
 
+app.get("/", (req, res) => {
+  res.send("Welcome to Lumbini Rentals API");
+});
+
+
 // Get all properties
 app.get('/api/properties', (req, res) => {
   db.all(`SELECT * FROM properties`, [], (err, rows) => {
