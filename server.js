@@ -13,7 +13,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true })); 
 
 
-// Clean, readable query endpoint integration logic
+// Get all properties
 app.get('/api/properties', (req, res) => {
   db.all(`SELECT * FROM properties`, [], (err, rows) => {
     if (err) return res.status(500).json({ error: err.message });
@@ -29,6 +29,12 @@ app.get('/api/properties', (req, res) => {
     res.json(processedRows);
   });
 });
+
+// Upload images/videos for a property
+app.put('/api/properties/upload/:id', (req, res) => {})
+
+// Update property details
+app.put('/api/properties/:id', (req, res) => {})
 
 // 404 Handler 
 app.use((req, res) => { 

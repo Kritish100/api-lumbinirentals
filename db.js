@@ -2,7 +2,7 @@
 const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
 
-const dbPath = path.resolve(__dirname, 'app.db');
+const dbPath = path.resolve(__dirname, '../lumbinirentals.db');
 
 const db = new sqlite3.Database(dbPath, (err) => {
   if (err) {
@@ -35,6 +35,7 @@ db.serialize(() => {
       ownerContact TEXT NOT NULL,
       activeOffer BOOLEAN DEFAULT 0,
       activeDescription TEXT,
+      isArchived BOOLEAN DEFAULT 0,
       specifications TEXT DEFAULT '{}' CHECK(json_valid(specifications)),
       images TEXT NOT NULL DEFAULT '[]' CHECK(json_valid(images)),
       videos TEXT DEFAULT '[]' CHECK(json_valid(videos)),
