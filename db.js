@@ -33,6 +33,8 @@ db.serialize(() => {
       description TEXT,
       ownerName TEXT NOT NULL,
       ownerContact TEXT NOT NULL,
+      activeOffer BOOLEAN DEFAULT 0,
+      activeDescription TEXT,
       specifications TEXT DEFAULT '{}' CHECK(json_valid(specifications)),
       images TEXT NOT NULL DEFAULT '[]' CHECK(json_valid(images)),
       videos TEXT DEFAULT '[]' CHECK(json_valid(videos)),
