@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lumbini Rentals API Portal</title>
+    <link rel="preconnect" href="https://googleapis.com">
+    <link rel="preconnect" href="https://gstatic.com" crossorigin>
+    <link href="https://googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-main: #F8FAFC;
+            --bg-card: #FFFFFF;
+            --text-primary: #0F172A;
+            --text-secondary: #475569;
+            --accent-primary: #0D9488;
+            --accent-gradient: linear-gradient(135deg, #0D9488 0%, #EA580C 100%);
+            --success: #0D9488;
+            --border-color: #E2E8F0;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-primary);
+            line-height: 1.6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 2rem;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Decorative Background Glows */
+        .bg-glow-1 {
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(13, 148, 136, 0.08) 0%, rgba(0,0,0,0) 70%);
+            top: -10%;
+            left: -10%;
+            z-index: 0;
+        }
+
+        .bg-glow-2 {
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(234, 88, 12, 0.05) 0%, rgba(0,0,0,0) 70%);
+            bottom: -10%;
+            right: -10%;
+            z-index: 0;
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 900px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            padding: 3rem;
+            box-shadow: 0 20px 40px -15px rgba(15, 23, 42, 0.05);
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 3rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 2rem;
+        }
+
+        .logo-area h1 {
+            font-size: 2.25rem;
+            font-weight: 700;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        .logo-area p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(13, 148, 136, 0.1);
+            border: 1px solid rgba(13, 148, 136, 0.2);
+            color: var(--success);
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+
+        .status-ping {
+            width: 8px;
+            height: 8px;
+            background-color: var(--success);
+            border-radius: 50%;
+            position: relative;
+        }
+
+        .status-ping::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-color: var(--success);
+            border-radius: 50%;
+            animation: ping 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;
+            opacity: 0.75;
+            top: 0;
+            left: 0;
+        }
+
+        @keyframes ping {
+            75%, 100% {
+                transform: scale(2.5);
+                opacity: 0;
+            }
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .card {
+            background: #F8FAFC;
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 1.5rem;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            border-color: rgba(13, 148, 136, 0.4);
+        }
+
+        .card h3 {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .card p {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+        }
+
+        .code-block-wrapper {
+            margin-top: 2rem;
+            box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.08);
+        }
+
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #0F172A;
+            border-bottom: none;
+            padding: 0.75rem 1.25rem;
+            border-top-left-radius: 12px;
+            border-top-right-radius: 12px;
+        }
+
+        .code-title {
+            font-size: 0.85rem;
+            color: #94A3B8;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .code-dots {
+            display: flex;
+            gap: 6px;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #334155;
+        }
+
+        pre {
+            background: #0F172A;
+            padding: 1.5rem;
+            border-bottom-left-radius: 12px;
+            border-bottom-right-radius: 12px;
+            overflow-x: auto;
+        }
+
+        code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: #E2E8F0;
+        }
+
+        .keyword { color: #FB923C; }   /* Orange */
+        .string { color: #2DD4BF; }    /* Teal */
+        .function { color: #38BDF8; }  /* Light Blue */
+        .comment { color: #64748B; }
+
+        footer {
+            text-align: center;
+            margin-top: 3rem;
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            border-top: 1px solid var(--border-color);
+            padding-top: 2rem;
+        }
+
+        @media (max-width: 640px) {
+            header {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            .container {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-glow-1"></div>
+    <div class="bg-glow-2"></div>
+
+    <div class="container">
+        <header>
+            <div class="logo-area">
+                <h1>Lumbini Rentals API</h1>
+                <p>Production Environment Node Gateway</p>
+            </div>
+            <div class="status-badge">
+                <span class="status-ping"></span>
+                Operational
+            </div>
+        </header>
+
+        <main>
+            <div class="grid">
+                <div class="card">
+                    <h3>⚡ High Performance</h3>
+                    <p>Powered by native SQLite3 drivers optimized for rapid querying execution.</p>
+                </div>
+                <div class="card">
+                    <h3>🔒 Secure Protocols</h3>
+                    <p>End-to-end tokenized headers shielding structural database integrations.</p>
+                </div>
+                <div class="card">
+                    <h3>🛠️ REST Infrastructure</h3>
+                    <p>Clean application routing built intentionally around semantic JSON schemas.</p>
+                </div>
+            </div>
+
+            <div class="code-block-wrapper">
+                <div class="code-header">
+                    <span class="code-title">javascript // quick-test.js</span>
+                    <div class="code-dots">
+                        <div class="dot" style="background:#EF4444;"></div>
+                        <div class="dot" style="background:#F59E0B;"></div>
+                        <div class="dot" style="background:#10B981;"></div>
+                    </div>
+                </div>
+                <pre><code><span class="comment">// Query the endpoint directly inside your client framework</span>
+<span class="keyword">const</span> fetchDetails = <span class="keyword">async</span> () => {
+    <span class="keyword">const</span> response = <span class="keyword">await</span> <span class="function">fetch</span>(<span class="string">'https://lumbinirentals.com'</span>);
+    <span class="keyword">const</span> payload = <span class="keyword">await</span> response.<span class="function">json</span>();
+    console.<span class="function">log</span>(<span class="string">'System Status: Connected'</span>, payload);
+};</code></pre>
+            </div>
+        </main>
+
+        <footer>
+            <p>&copy; 2026 Lumbini Rentals. All Core Application Systems Active.</p>
+        </footer>
+    </div>
+</body>
+</html>

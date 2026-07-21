@@ -2,6 +2,7 @@
 const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv'); 
+const path = require('path');
 const db = require('./db');
 
 dotenv.config(); 
@@ -14,7 +15,7 @@ app.use(express.urlencoded({ extended: true }));
 
 
 app.get("/", (req, res) => {
-  res.send("Welcome to Lumbini Rentals API");
+  res.sendFile(path.join(__dirname, 'index.html'));
 });
 
 
