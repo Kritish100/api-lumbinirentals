@@ -37,9 +37,8 @@ db.serialize(() => {
       activeOffer BOOLEAN DEFAULT 0,
       activeDescription TEXT,
       isArchived BOOLEAN DEFAULT 0,
+      assets TEXT DEFAULT '[]' CHECK(json_valid(assets)),
       specifications TEXT DEFAULT '{}' CHECK(json_valid(specifications)),
-      images TEXT NOT NULL DEFAULT '[]' CHECK(json_valid(images)),
-      videos TEXT DEFAULT '[]' CHECK(json_valid(videos)),
       amenities TEXT DEFAULT '{}' CHECK(json_valid(amenities))
     );
   `;
