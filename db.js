@@ -21,6 +21,7 @@ db.serialize(() => {
   const INITIAL_SCHEMA = `
     CREATE TABLE IF NOT EXISTS properties (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
+      name TEXT NOT NULL,
       type TEXT NOT NULL,
       price REAL NOT NULL,
       floor TEXT NOT NULL,
