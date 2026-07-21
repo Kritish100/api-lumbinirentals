@@ -30,7 +30,7 @@ db.serialize(() => {
       ownerName TEXT NOT NULL,
       ownerContact TEXT NOT NULL,
       location TEXT NOT NULL,
-      subLocation TEXT NOT NULL,
+      subLocation TEXT,
       latitude REAL,
       longitude REAL,
       mapsLink TEXT,

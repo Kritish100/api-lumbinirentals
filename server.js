@@ -99,6 +99,7 @@ app.post('/api/properties', verifyApiKey, (req, res) => {
     specifications, amenities 
   } = req.body;
   
+  const cats = JSON.stringify(category || []);
   const specs = JSON.stringify(specifications || {});
   const amens = JSON.stringify(amenities || {});
 
@@ -112,7 +113,7 @@ app.post('/api/properties', verifyApiKey, (req, res) => {
   `;
   
    const params = [
-    title, category, type, price, 
+    title, cats, type, price, 
     isNegotiable ? 1 : 0, 
     description, ownerName, ownerContact, location, subLocation, 
     latNum, longNum, mapsLink, 
@@ -151,6 +152,7 @@ app.put('/api/properties/:id', verifyApiKey, (req, res) => {
   } = req.body;
 
     // 1. Prepare JSON strings
+  const cats = JSON.stringify(category || []);
   const specs = JSON.stringify(specifications || {});
   const amens = JSON.stringify(amenities || {});
 
@@ -172,7 +174,7 @@ app.put('/api/properties/:id', verifyApiKey, (req, res) => {
 
     // 4. Map parameters (the ID goes last to match the WHERE clause)
   const params = [
-    title, category, type, price, 
+    title, cats, type, price, 
     isNegotiable ? 1 : 0, 
     description, ownerName, ownerContact, location, subLocation, 
     latNum, longNum, mapsLink, 
