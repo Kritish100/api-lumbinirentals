@@ -1,5 +1,5 @@
 // db.js
-const sqlite3 = require('sqlite3').verbose();
+const sqlite3 = require('sqlite3-offline-next').verbose();
 const path = require('path');
 
 const dbPath = path.resolve(__dirname, '../lumbinirentals.db');
