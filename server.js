@@ -79,6 +79,7 @@ app.get('/api/properties/admin', verifyApiKey, (req, res) => {
     
     const processedRows = rows.map(row => ({
       ...row,
+      category: JSON.parse(row.category),
       specifications: JSON.parse(row.specifications),
       assets: JSON.parse(row.assets),
       amenities: JSON.parse(row.amenities)
@@ -151,7 +152,7 @@ app.put('/api/properties/:id', verifyApiKey, (req, res) => {
     specifications, amenities 
   } = req.body;
 
-    // 1. Prepare JSON strings
+  // 1. Prepare JSON strings
   const cats = JSON.stringify(category || []);
   const specs = JSON.stringify(specifications || {});
   const amens = JSON.stringify(amenities || {});

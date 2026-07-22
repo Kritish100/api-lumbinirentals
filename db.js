@@ -24,6 +24,7 @@ db.serialize(() => {
       title TEXT NOT NULL,
       category TEXT NOT NULL DEFAULT '[]' CHECK(json_valid(category)),
       type TEXT NOT NULL,
+      status TEXT NOT NULL,
       price REAL NOT NULL,
       isNegotiable BOOLEAN DEFAULT 1,
       description TEXT,
