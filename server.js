@@ -94,7 +94,7 @@ app.get('/api/properties/admin', verifyApiKey, (req, res) => {
 // =================================
 app.post('/api/properties', verifyApiKey, (req, res) => {
   const { 
-    title, category, type, price, isNegotiable, description, 
+    title, category, type, status, price, isNegotiable, description, 
     ownerName, ownerContact, location, subLocation, latitude, longitude, 
     mapsLink, activeOffer, offerDescription, isArchived, 
     specifications, amenities 
@@ -109,12 +109,12 @@ app.post('/api/properties', verifyApiKey, (req, res) => {
 
   const sql = `
     INSERT INTO properties 
-    (title, category, type, price, isNegotiable, description, ownerName, ownerContact, location, subLocation, latitude, longitude, mapsLink, activeOffer, offerDescription, isArchived, specifications, amenities) 
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    (title, category, type, status, price, isNegotiable, description, ownerName, ownerContact, location, subLocation, latitude, longitude, mapsLink, activeOffer, offerDescription, isArchived, specifications, amenities) 
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
   `;
   
    const params = [
-    title, cats, type, price, 
+    title, cats, type, status, price, 
     isNegotiable ? 1 : 0, 
     description, ownerName, ownerContact, location, subLocation, 
     latNum, longNum, mapsLink, 
@@ -146,7 +146,7 @@ app.put('/api/properties/:id', verifyApiKey, (req, res) => {
   const { id } = req.params; 
 
   const { 
-    title, category, type, price, isNegotiable, description, 
+    title, category, type, status, price, isNegotiable, description, 
     ownerName, ownerContact, location, subLocation, latitude, longitude, 
     mapsLink, activeOffer, offerDescription, isArchived, 
     specifications, amenities 
@@ -165,7 +165,7 @@ app.put('/api/properties/:id', verifyApiKey, (req, res) => {
   const sql = `
     UPDATE properties 
     SET 
-      title = ?, category = ?, type = ?, price = ?, isNegotiable = ?, 
+      title = ?, category = ?, type = ?, status = ?, price = ?, isNegotiable = ?, 
       description = ?, ownerName = ?, ownerContact = ?, location = ?, 
       subLocation = ?, latitude = ?, longitude = ?, mapsLink = ?, 
       activeOffer = ?, offerDescription = ?, isArchived = ?, 
@@ -175,7 +175,7 @@ app.put('/api/properties/:id', verifyApiKey, (req, res) => {
 
     // 4. Map parameters (the ID goes last to match the WHERE clause)
   const params = [
-    title, cats, type, price, 
+    title, cats, type, status, price, 
     isNegotiable ? 1 : 0, 
     description, ownerName, ownerContact, location, subLocation, 
     latNum, longNum, mapsLink, 
