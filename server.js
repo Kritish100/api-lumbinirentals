@@ -42,9 +42,9 @@ app.get('/api/properties', (req, res) => {
   // Explicitly name only the safe columns you want to expose publicly
   const sql = `
     SELECT 
-      id, title, category, type, price, isNegotiable, 
+      id, views, title, category, type, status, price, isNegotiable, 
       description, location, subLocation, isOfferActive, 
-      offerDescription, assets, specifications 
+      offerDescription, assets, specifications, createdAt 
     FROM properties 
     WHERE isArchived = 0
   `;
