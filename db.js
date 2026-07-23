@@ -34,13 +34,13 @@ db.serialize(() => {
       subLocation TEXT,
       latitude REAL,
       longitude REAL,
-      mapsLink TEXT,
+      mapsUrl TEXT,
       activeOffer BOOLEAN DEFAULT 0,
       offerDescription TEXT,
       isArchived BOOLEAN DEFAULT 0,
       assets TEXT DEFAULT '[]' CHECK(json_valid(assets)),
       specifications TEXT DEFAULT '{}' CHECK(json_valid(specifications)),
-      amenities TEXT DEFAULT '{}' CHECK(json_valid(amenities))
+      createdAt DATETIME DEFAULT CURRENT_TIMESTAMP
     );
   `;
   
