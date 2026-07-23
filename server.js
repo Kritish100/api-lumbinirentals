@@ -43,8 +43,8 @@ app.get('/api/properties', (req, res) => {
   const sql = `
     SELECT 
       id, title, category, type, price, isNegotiable, 
-      description, location, subLocation, activeOffer, 
-      offerDescription, isArchived, assets, specifications, amenities 
+      description, location, subLocation, isOfferActive, 
+      offerDescription, assets, specifications 
     FROM properties 
     WHERE isArchived = 0
   `;
@@ -56,8 +56,7 @@ app.get('/api/properties', (req, res) => {
       ...row,
       category: JSON.parse(row.category),
       specifications: JSON.parse(row.specifications),
-      assets: JSON.parse(row.assets),
-      amenities: JSON.parse(row.amenities)
+      assets: JSON.parse(row.assets)
     }));
 
     res.json({ success: true, data: processedRows });
@@ -82,8 +81,7 @@ app.get('/api/properties/admin', verifyApiKey, (req, res) => {
       ...row,
       category: JSON.parse(row.category),
       specifications: JSON.parse(row.specifications),
-      assets: JSON.parse(row.assets),
-      amenities: JSON.parse(row.amenities)
+      assets: JSON.parse(row.assets)
     }));
 
     res.json({ success: true, data: processedRows });
@@ -97,21 +95,20 @@ app.post('/api/properties', verifyApiKey, (req, res) => {
   const { 
     title, category, type, status, price, isNegotiable, description, 
     ownerName, ownerContact, location, subLocation, latitude, longitude, 
-    mapsLink, activeOffer, offerDescription, isArchived, 
-    specifications, amenities 
+    mapsLink, isOfferActive, offerDescription, isArchived, 
+    specifications 
   } = req.body;
   
   const cats = JSON.stringify(category || []);
   const specs = JSON.stringify(specifications || {});
-  const amens = JSON.stringify(amenities || {});
 
   const latNum = latitude ? parseFloat(latitude) : null;
   const longNum = longitude ? parseFloat(longitude) : null;
 
   const sql = `
     INSERT INTO properties 
-    (title, category, type, status, price, isNegotiable, description, ownerName, ownerContact, location, subLocation, latitude, longitude, mapsLink, activeOffer, offerDescription, isArchived, specifications, amenities) 
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    (title, category, type, status, price, isNegotiable, description, ownerName, ownerContact, location, subLocation, latitude, longitude, mapsLink, isOfferActive, offerDescription, isArchived, specifications) 
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
   `;
   
    const params = [
@@ -119,10 +116,10 @@ app.post('/api/properties', verifyApiKey, (req, res) => {
     isNegotiable ? 1 : 0, 
     description, ownerName, ownerContact, location, subLocation, 
     latNum, longNum, mapsLink, 
-    activeOffer ? 1 : 0, 
+    isOfferActive ? 1 : 0, 
     offerDescription, 
     isArchived ? 1 : 0, 
-    specs, amens
+    specs
   ]
 
   db.run(sql, params, function(err) {
@@ -149,14 +146,13 @@ app.put('/api/properties/:id', verifyApiKey, (req, res) => {
   const { 
     title, category, type, status, price, isNegotiable, description, 
     ownerName, ownerContact, location, subLocation, latitude, longitude, 
-    mapsLink, activeOffer, offerDescription, isArchived, 
-    specifications, amenities 
+    mapsLink, isOfferActive, offerDescription, isArchived, 
+    specifications
   } = req.body;
 
   // 1. Prepare JSON strings
   const cats = JSON.stringify(category || []);
   const specs = JSON.stringify(specifications || {});
-  const amens = JSON.stringify(amenities || {});
 
   // 2. Prepare Coordinate numbers
   const latNum = latitude ? parseFloat(latitude) : null;
@@ -169,8 +165,8 @@ app.put('/api/properties/:id', verifyApiKey, (req, res) => {
       title = ?, category = ?, type = ?, status = ?, price = ?, isNegotiable = ?, 
       description = ?, ownerName = ?, ownerContact = ?, location = ?, 
       subLocation = ?, latitude = ?, longitude = ?, mapsLink = ?, 
-      activeOffer = ?, offerDescription = ?, isArchived = ?, 
-      specifications = ?, amenities = ?
+      isOfferActive = ?, offerDescription = ?, isArchived = ?, 
+      specifications = ?
     WHERE id = ?
   `;
 
@@ -180,10 +176,10 @@ app.put('/api/properties/:id', verifyApiKey, (req, res) => {
     isNegotiable ? 1 : 0, 
     description, ownerName, ownerContact, location, subLocation, 
     latNum, longNum, mapsLink, 
-    activeOffer ? 1 : 0, 
+    isOfferActive ? 1 : 0, 
     offerDescription, 
     isArchived ? 1 : 0, 
-    specs, amens,
+    specs,
     id
   ];
 
