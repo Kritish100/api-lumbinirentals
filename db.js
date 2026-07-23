@@ -21,6 +21,7 @@ db.serialize(() => {
   const INITIAL_SCHEMA = `
     CREATE TABLE IF NOT EXISTS properties (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
+      views INTEGER DEFAULT 0,
       title TEXT NOT NULL,
       category TEXT NOT NULL DEFAULT '[]' CHECK(json_valid(category)),
       type TEXT NOT NULL,
@@ -28,6 +29,7 @@ db.serialize(() => {
       price REAL NOT NULL,
       isNegotiable BOOLEAN DEFAULT 1,
       description TEXT,
+      adminNote TEXT,
       ownerName TEXT NOT NULL,
       ownerContact TEXT NOT NULL,
       location TEXT NOT NULL,
@@ -35,7 +37,7 @@ db.serialize(() => {
       latitude REAL,
       longitude REAL,
       mapsUrl TEXT,
-      activeOffer BOOLEAN DEFAULT 0,
+      isOfferActive BOOLEAN DEFAULT 0,
       offerDescription TEXT,
       isArchived BOOLEAN DEFAULT 0,
       assets TEXT DEFAULT '[]' CHECK(json_valid(assets)),
