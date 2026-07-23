@@ -95,7 +95,7 @@ app.post('/api/properties', verifyApiKey, (req, res) => {
   const { 
     title, category, type, status, price, isNegotiable, description, 
     ownerName, ownerContact, location, subLocation, latitude, longitude, 
-    mapsLink, isOfferActive, offerDescription, isArchived, 
+    mapsUrl, isOfferActive, offerDescription, isArchived, 
     specifications 
   } = req.body;
   
@@ -107,7 +107,7 @@ app.post('/api/properties', verifyApiKey, (req, res) => {
 
   const sql = `
     INSERT INTO properties 
-    (title, category, type, status, price, isNegotiable, description, ownerName, ownerContact, location, subLocation, latitude, longitude, mapsLink, isOfferActive, offerDescription, isArchived, specifications) 
+    (title, category, type, status, price, isNegotiable, description, ownerName, ownerContact, location, subLocation, latitude, longitude, mapsUrl, isOfferActive, offerDescription, isArchived, specifications) 
     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
   `;
   
@@ -115,7 +115,7 @@ app.post('/api/properties', verifyApiKey, (req, res) => {
     title, cats, type, status, price, 
     isNegotiable ? 1 : 0, 
     description, ownerName, ownerContact, location, subLocation, 
-    latNum, longNum, mapsLink, 
+    latNum, longNum, mapsUrl, 
     isOfferActive ? 1 : 0, 
     offerDescription, 
     isArchived ? 1 : 0, 
@@ -146,7 +146,7 @@ app.put('/api/properties/:id', verifyApiKey, (req, res) => {
   const { 
     title, category, type, status, price, isNegotiable, description, 
     ownerName, ownerContact, location, subLocation, latitude, longitude, 
-    mapsLink, isOfferActive, offerDescription, isArchived, 
+    mapsUrl, isOfferActive, offerDescription, isArchived, 
     specifications
   } = req.body;
 
@@ -164,7 +164,7 @@ app.put('/api/properties/:id', verifyApiKey, (req, res) => {
     SET 
       title = ?, category = ?, type = ?, status = ?, price = ?, isNegotiable = ?, 
       description = ?, ownerName = ?, ownerContact = ?, location = ?, 
-      subLocation = ?, latitude = ?, longitude = ?, mapsLink = ?, 
+      subLocation = ?, latitude = ?, longitude = ?, mapsUrl = ?, 
       isOfferActive = ?, offerDescription = ?, isArchived = ?, 
       specifications = ?
     WHERE id = ?
@@ -175,7 +175,7 @@ app.put('/api/properties/:id', verifyApiKey, (req, res) => {
     title, cats, type, status, price, 
     isNegotiable ? 1 : 0, 
     description, ownerName, ownerContact, location, subLocation, 
-    latNum, longNum, mapsLink, 
+    latNum, longNum, mapsUrl, 
     isOfferActive ? 1 : 0, 
     offerDescription, 
     isArchived ? 1 : 0, 
