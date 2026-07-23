@@ -35,7 +35,7 @@ app.get("/", (req, res) => {
 
 
 // =================================
-// Get all unarchived properties for public view 
+// Get all properties for public view 
 // =================================
 app.get('/api/properties', (req, res) => {
 
@@ -54,6 +54,7 @@ app.get('/api/properties', (req, res) => {
     
     const processedRows = rows.map(row => ({
       ...row,
+      category: JSON.parse(row.category),
       specifications: JSON.parse(row.specifications),
       assets: JSON.parse(row.assets),
       amenities: JSON.parse(row.amenities)
@@ -65,7 +66,7 @@ app.get('/api/properties', (req, res) => {
 
 
 // =================================
-// Get all unarchived properties for admin view 
+// Get all archived/unarchived properties for admin view 
 // =================================
 app.get('/api/properties/admin', verifyApiKey, (req, res) => {
 
