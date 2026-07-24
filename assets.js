@@ -3,6 +3,7 @@ const multer = require("multer");
 const path = require("path");
 const fs = require("fs/promises");
 const { randomUUID } = require("crypto");
+const db = require("./db");
 
 // Keep MIME types in sync with your frontend
 const ACCEPTED_MIME = [
