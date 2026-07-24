@@ -15,9 +15,24 @@ const API_KEY = process.env.API_KEY || "default_api_key";
 const UPLOAD_ROOT =
   process.env.UPLOAD_ROOT || path.join(process.cwd(), "uploads");
 
-
 app.use("/uploads", express.static(UPLOAD_ROOT));
 app.use(cors());
+app.use((req, res, next) => {
+  if (
+    req.headers["content-type"] &&
+    req.headers["content-type"].startsWith("multipart/form-data")
+  )
+    return next(); // Skip JSON parser for multipart uploads
+  else express.json({ limit: "100mb" })(req, res, next);
+});
+app.use((req, res, next) => {
+  if (
+    req.headers["content-type"] &&
+    req.headers["content-type"].startsWith("multipart/form-data")
+  )
+    return next();
+  else express.urlencoded({ limit: "100mb", extended: true })(req, res, next);
+});
 
 // =================================
 // API Key Middleware
@@ -35,12 +50,7 @@ const verifyApiKey = (req, res, next) => {
 // =================================
 
 // FILE UPLOAD
-// Multer for FormData Payload
 app.use("/api/properties/assets/:propertyId", verifyApiKey, assetsRouter);
-
-// For JSON Payload
-app.use(express.json({ limit: "100mb" }));
-app.use(express.urlencoded({ limit: "100mb", extended: true }));
 
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "index.html"));
