@@ -83,10 +83,24 @@ router.post("", upload.array("files", 20), async (req, res) => {
       }),
     );
 
-    // TODO: Persist `finalAssets` to your Database here
-    // await db.property.update({ where: { id: propertyId }, data: { assets: finalAssets } });
+    // SQL UPDATE Statement
+    const sql = `
+      UPDATE properties 
+      SET 
+        assets = ?
+      WHERE id = ?
+    `;
 
-    res.json({ assets: finalAssets });
+    db.run(sql, [JSON.stringify(finalAssets), propertyId], function (err) {
+      if (err)
+        return res.status(400).json({ success: false, error: err.message });
+
+      res.status(200).json({
+        success: true,
+        message: "Assets uploaded successfully",
+        assets: finalAssets,
+      });
+    });
   } catch (err) {
     console.error("Asset save error:", err);
     const status = err instanceof multer.MulterError ? 400 : 500;

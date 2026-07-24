@@ -50,7 +50,6 @@ const verifyApiKey = (req, res, next) => {
 // =================================
 
 // FILE UPLOAD
-app.use("/api/properties/assets/:propertyId", verifyApiKey, assetsRouter);
 
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "index.html"));
@@ -179,7 +178,7 @@ app.post("/api/properties", verifyApiKey, (req, res) => {
 // =================================
 // Upload Property Assets
 // =================================
-app.put("/api/properties/upload/:id", verifyApiKey, (req, res) => {});
+app.use("/api/properties/assets/:propertyId", verifyApiKey, assetsRouter);
 
 // =================================
 // Update Property
