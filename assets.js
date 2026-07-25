@@ -2,6 +2,7 @@ const { Router } = require("express");
 const multer = require("multer");
 const path = require("path");
 const fs = require("fs/promises");
+const sharp = require("sharp");
 const { randomUUID } = require("crypto");
 const db = require("./db");
 
@@ -56,11 +57,48 @@ router.post("", upload.array("files", 20), async (req, res) => {
       ? meta.deletedPaths
       : [];
 
-    // Map newly uploaded files to their public paths
-    const uploadedPaths = (req.files || []).map(
-      (f) => `/uploads/properties/${propertyId}/${f.filename}`,
+    const dir = path.join(UPLOAD_ROOT, "properties", propertyId);
+
+    const uploadedPaths = await Promise.all(
+      (req.files || []).map(async (file) => {
+        const isVideo = file.mimetype.startsWith("video/");
+        const publicBasePath = `/uploads/properties/${propertyId}`;
+
+        if (isVideo) {
+          // Videos remain untouched
+          return `${publicBasePath}/${file.filename}`;
+        } else {
+          // It's an image: Process it with Sharp directly from the temp disk location
+          const webpFilename = `${path.parse(file.filename).name}.webp`;
+          const inputAbsolutePath = file.path; // multer's temporary disk path
+          const outputAbsolutePath = path.join(dir, webpFilename);
+        }
+        try {
+          await sharp(inputAbsolutePath)
+            .rotate() // Auto-correct orientation
+            .resize({ width: 1200, withoutEnlargement: true })
+            .webp({ quality: 70 })
+            .toFile(outputAbsolutePath);
+
+          // If the converted webp name is different from the original multer filename,
+          // delete the heavy raw file left on disk
+          if (file.filename !== webpFilename) {
+            await fs.unlink(inputAbsolutePath).catch(() => {});
+          }
+
+          return `${publicBasePath}/${webpFilename}`;
+        } catch (e) {
+          console.error(
+            "Sharp optimization failed, falling back to original file:",
+            sharpErr,
+          );
+          // Fallback: if optimization fails for any weird edge case, use the raw uploaded file path
+          return `${publicBasePath}/${file.filename}`;
+        }
+      }),
     );
 
+    // // Map newly uploaded files to their public paths
     let cursor = 0;
     const finalAssets = order.map((entry) =>
       typeof entry === "string" && entry.startsWith("NEW:")
@@ -86,10 +124,7 @@ router.post("", upload.array("files", 20), async (req, res) => {
 
     // SQL UPDATE Statement
     const sql = `
-      UPDATE properties 
-      SET 
-        assets = ?
-      WHERE id = ?
+      UPDATE properties SET assets = ? WHERE id = ?
     `;
 
     db.run(sql, [JSON.stringify(finalAssets), propertyId], function (err) {
