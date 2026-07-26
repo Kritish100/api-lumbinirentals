@@ -90,7 +90,7 @@ router.post("", upload.array("files", 20), async (req, res) => {
         } catch (e) {
           console.error(
             "Sharp optimization failed, falling back to original file:",
-            sharpErr,
+            e,
           );
           // Fallback: if optimization fails for any weird edge case, use the raw uploaded file path
           return `${publicBasePath}/${file.filename}`;
