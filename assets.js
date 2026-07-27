@@ -72,28 +72,28 @@ router.post("", upload.array("files", 20), async (req, res) => {
           const webpFilename = `${path.parse(file.filename).name}.webp`;
           const inputAbsolutePath = file.path; // multer's temporary disk path
           const outputAbsolutePath = path.join(dir, webpFilename);
-        }
-        try {
-          await sharp(inputAbsolutePath)
-            .rotate() // Auto-correct orientation
-            .resize({ width: 1200, withoutEnlargement: true })
-            .webp({ quality: 70 })
-            .toFile(outputAbsolutePath);
+          try {
+            await sharp(inputAbsolutePath)
+              .rotate() // Auto-correct orientation
+              .resize({ width: 1200, withoutEnlargement: true })
+              .webp({ quality: 70 })
+              .toFile(outputAbsolutePath);
 
-          // If the converted webp name is different from the original multer filename,
-          // delete the heavy raw file left on disk
-          if (file.filename !== webpFilename) {
-            await fs.unlink(inputAbsolutePath).catch(() => {});
+            // If the converted webp name is different from the original multer filename,
+            // delete the heavy raw file left on disk
+            if (file.filename !== webpFilename) {
+              await fs.unlink(inputAbsolutePath).catch(() => {});
+            }
+
+            return `${publicBasePath}/${webpFilename}`;
+          } catch (e) {
+            console.error(
+              "Sharp optimization failed, falling back to original file:",
+              e,
+            );
+            // Fallback: if optimization fails for any weird edge case, use the raw uploaded file path
+            return `${publicBasePath}/${file.filename}`;
           }
-
-          return `${publicBasePath}/${webpFilename}`;
-        } catch (e) {
-          console.error(
-            "Sharp optimization failed, falling back to original file:",
-            e,
-          );
-          // Fallback: if optimization fails for any weird edge case, use the raw uploaded file path
-          return `${publicBasePath}/${file.filename}`;
         }
       }),
     );
